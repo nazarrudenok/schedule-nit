@@ -27,80 +27,200 @@ def get_schedule(message):
 
         bot.send_message(cht, result_string)
 
-@bot.message_handler(commands=['timetable_1'])
+@bot.message_handler(commands=['timetable'])
 def get_timetable_1(message):
     cht = message.chat.id
 
-    current_date = datetime.datetime.now()
-    day = current_date.strftime("%A")
+    markup = telebot.types.InlineKeyboardMarkup()
+    button1 = telebot.types.InlineKeyboardButton(text='1', callback_data='first')
+    button2 = telebot.types.InlineKeyboardButton(text='2', callback_data='second')
+    markup.add(button1, button2)
 
-    now = datetime.datetime.now()
-
-    days_of_week = {
-        0: "Понеділок",
-        1: "Вівторок",
-        2: "Середа",
-        3: "Четвер",
-        4: "П'ятниця",
-        5: "Субота",
-        6: "Неділя"
-    }
-
-    day_of_week_number = now.weekday()
-
-    formatted_date = f"{days_of_week[day_of_week_number]} {now.strftime('%d.%m')}"
+    bot.send_message(cht, 'Обери групу:', reply_markup=markup)
 
 
 
-    with open('_jsons/timetable group 1.json', 'r', encoding='utf-8') as f:
-        data = json.load(f)
 
-        num = 1
-        result_string = ''
-        for i in data:
-            if i == day:
-                for subject in data[i]:
-                    result_string += f"{num}. {subject}\n"
-                    num += 1
+@bot.callback_query_handler(func=lambda call: True)
+def callback_handler(call):
+    cht = call.message.chat.id
 
-        bot.send_message(cht, f'<b>{formatted_date}</b>\n{result_string}', parse_mode='HTML')
+    if call.data == 'first':
 
-@bot.message_handler(commands=['timetable_2'])
-def get_timetable_1(message):
+        current_date = datetime.datetime.now()
+        day = current_date.strftime("%A")
+
+        now = datetime.datetime.now()
+
+        days_of_week = {
+            0: "Понеділок",
+            1: "Вівторок",
+            2: "Середа",
+            3: "Четвер",
+            4: "П'ятниця",
+            5: "Субота",
+            6: "Неділя"
+        }
+
+        day_of_week_number = now.weekday()
+
+        formatted_date = f"{days_of_week[day_of_week_number]} {now.strftime('%d.%m')}"
+
+        with open('_jsons/timetable group 1.json', 'r', encoding='utf-8') as f:
+            data = json.load(f)
+
+            num = 1
+            result_string = ''
+            for i in data:
+                if i == day:
+                    for subject in data[i]:
+                        result_string += f"{num}. {subject}\n"
+                        num += 1
+
+            # bot.send_message(cht, f'<b>{formatted_date}</b>\n{result_string}', parse_mode='HTML')
+            bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'<b>{formatted_date}</b>\n{result_string}', parse_mode='HTML')
+    if call.data == 'second':
+        current_date = datetime.datetime.now()
+        day = current_date.strftime("%A")
+
+        now = datetime.datetime.now()
+
+        days_of_week = {
+            0: "Понеділок",
+            1: "Вівторок",
+            2: "Середа",
+            3: "Четвер",
+            4: "П'ятниця",
+            5: "Субота",
+            6: "Неділя"
+        }
+
+        day_of_week_number = now.weekday()
+
+        formatted_date = f"{days_of_week[day_of_week_number]} {now.strftime('%d.%m')}"
+
+        with open('_jsons/timetable group 2.json', 'r', encoding='utf-8') as f:
+            data = json.load(f)
+
+            num = 1
+            result_string = ''
+            for i in data:
+                if i == day:
+                    for subject in data[i]:
+                        result_string += f"{num}. {subject}\n"
+                        num += 1
+
+            # bot.send_message(cht, f'<b>{formatted_date}</b>\n{result_string}', parse_mode='HTML')
+            bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
+                                  text=f'<b>{formatted_date}</b>\n{result_string}', parse_mode='HTML')
+
+
+# @bot.message_handler(commands=['timetable_2'])
+# def get_timetable_1(message):
+#     cht = message.chat.id
+#
+#     current_date = datetime.datetime.now()
+#     day = current_date.strftime("%A")
+#
+#     now = datetime.datetime.now()
+#
+#     days_of_week = {
+#         0: "Понеділок",
+#         1: "Вівторок",
+#         2: "Середа",
+#         3: "Четвер",
+#         4: "П'ятниця",
+#         5: "Субота",
+#         6: "Неділя"
+#     }
+#
+#     day_of_week_number = now.weekday()
+#
+#     formatted_date = f"{days_of_week[day_of_week_number]} {now.strftime('%d.%m')}"
+#
+#
+#
+#     with open('_jsons/timetable group 2.json', 'r', encoding='utf-8') as f:
+#         data = json.load(f)
+#
+#         num = 1
+#         result_string = ''
+#         for i in data:
+#             if i == day:
+#                 for subject in data[i]:
+#                     result_string += f"{num}. {subject}\n"
+#                     num += 1
+#
+#         bot.send_message(cht, f'<b>{formatted_date}</b>\n{result_string}', parse_mode='HTML')
+
+@bot.message_handler(commands=['tomorrow'])
+def tmorrow_schedule(message):
     cht = message.chat.id
 
-    current_date = datetime.datetime.now()
-    day = current_date.strftime("%A")
+    markup = telebot.types.InlineKeyboardMarkup()
+    button1 = telebot.types.InlineKeyboardButton(text='1', callback_data='first')
+    button2 = telebot.types.InlineKeyboardButton(text='2', callback_data='second')
+    markup.add(button1, button2)
 
-    now = datetime.datetime.now()
+    bot.send_message(cht, 'Обери групу:', reply_markup=markup)
 
-    days_of_week = {
-        0: "Понеділок",
-        1: "Вівторок",
-        2: "Середа",
-        3: "Четвер",
-        4: "П'ятниця",
-        5: "Субота",
-        6: "Неділя"
-    }
+@bot.callback_query_handler(func=lambda call: True)
+def callback_handler(call):
+    if call.data == 'first':
 
-    day_of_week_number = now.weekday()
+        now = datetime.datetime.now()
 
-    formatted_date = f"{days_of_week[day_of_week_number]} {now.strftime('%d.%m')}"
+        days_of_week = {
+            0: "Monday",
+            1: "Tuesday",
+            2: "Wednesday",
+            3: "Thursday",
+            4: "Friday",
+            5: "Saturday",
+            6: "Sunday"
+        }
+
+        day_of_week_number = now.weekday()
+        next_day_of_week_number = (day_of_week_number + 1) % 7
+
+        with open('_jsons/timetable group 1.json', 'r', encoding='utf-8') as f:
+            data = json.load(f)
+
+            num = 1
+            result_string = ''
+            for subject in data[days_of_week[next_day_of_week_number]]:
+                result_string += f"{num}. {subject}\n"
+                num += 1
+
+            bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=f'{result_string}')
 
 
+    elif call.data == 'second':
+        now = datetime.datetime.now()
 
-    with open('_jsons/timetable group 2.json', 'r', encoding='utf-8') as f:
-        data = json.load(f)
+        days_of_week = {
+            0: "Monday",
+            1: "Tuesday",
+            2: "Wednesday",
+            3: "Thursday",
+            4: "Friday",
+            5: "Saturday",
+            6: "Sunday"
+        }
 
-        num = 1
-        result_string = ''
-        for i in data:
-            if i == day:
-                for subject in data[i]:
-                    result_string += f"{num}. {subject}\n"
-                    num += 1
+        day_of_week_number = now.weekday()
+        next_day_of_week_number = (day_of_week_number + 1) % 7
 
-        bot.send_message(cht, f'<b>{formatted_date}</b>\n{result_string}', parse_mode='HTML')
+        with open('_jsons/timetable group 2.json', 'r', encoding='utf-8') as f:
+            data = json.load(f)
+
+            num = 1
+            result_string = ''
+            for subject in data[days_of_week[next_day_of_week_number]]:
+                result_string += f"{num}. {subject}\n"
+                num += 1
+
+            bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
+                                  text=f'{result_string}')
 
 bot.polling()
